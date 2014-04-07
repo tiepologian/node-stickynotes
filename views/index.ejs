@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Notes in the Cloud</title>
+<link  href="http://fonts.googleapis.com/css?family=Reenie+Beanie:regular" rel="stylesheet" type="text/css"> 
+<link rel="stylesheet" href="notes.css">
+<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+<script src="http:////cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/0.9.9/jquery.magnific-popup.min.js"></script>
+<script src="notes.js"></script>
+<link href="http://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/0.9.9/magnific-popup.css" rel="stylesheet">
+<link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+</head>
+<body>
+  <ul id="notes-ul">
+      <% notes.forEach(function(note){ %>
+          <li class='note' data-noteid=<%= note.id %> data-xpos=<%= note.xpos %> data-ypos=<%= note.ypos %>><a><h2><%= note.title %></h2><p><%= note.message %></p><i class="fa fa-trash-o fa-2x trash-icon"></i></a></li>
+      <% }) %>
+  </ul>
+  <a id="addicon" href="#test-form"><i class="fa fa-plus-square fa-5x popup-with-form"></i></a>
+  <form id="test-form" class="mfp-hide white-popup-block white-popup" method="post" action="create">
+	<h1>Create Note</h1>
+    <textarea id="note_t" name="note_text" placeholder="Write some text..." id="textarea"></textarea>	
+    <button id="submit_btn" type="submit">Create</button>
+</form>
+</body>
+</html>
