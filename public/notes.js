@@ -1,7 +1,12 @@
 // JavaScript Document
+
+var client;
+var uniqid = Date.now();
+
 $(function() {
 	$( ".note" ).draggable({
 	    stop: function(event, ui) {
+		client.publish('/updates', {client: uniqid, id: ui.helper[0].dataset.noteid, xpos: ui.position.left, ypos: ui.position.top});
 		$.ajax({
 		    type: "POST",
 		    url: "/note/" + ui.helper[0].dataset.noteid,
@@ -38,6 +43,7 @@ $(document).ready(function() {
     $('.trash-icon').click(function(e) {
         var noteID = $(this).parent('a').parent('li')[0]['dataset'].noteid;
 	$(this).parent('a').parent('li').remove();
+	client.publish('/notes', {client: uniqid, status: 'delete', id: noteID});
 	$.ajax({
 	    type: "DELETE",
 	    url: "/note/"+noteID
@@ -56,16 +62,70 @@ $(document).ready(function() {
 	.done(function(res) {
 	    console.log(res.id);
 	    $('#note_t').val("");
-	    $("#notes-ul").append("<li class='note' data-noteid=" + res.id + " data-xpos=0 data-ypos=0><a><h2>" + res.title + "</h2><p>" + messageD + "</p><i class='fa fa-trash-o fa-2x trash-icon'></i></a></li>");
+	    $("#notes-ul").append("<li class='note' id='" + res.id + "' data-noteid=" + res.id + " data-xpos=0 data-ypos=0><a><h2>" + res.title + "</h2><p>" + messageD + "</p><i class='fa fa-trash-o fa-2x trash-icon'></i></a></li>");
+	    $('.trash-icon').click(function(e) {
+                var noteID = $(this).parent('a').parent('li')[0]['dataset'].noteid;
+                $(this).parent('a').parent('li').remove();
+                client.publish('/notes', {client: uniqid, status: 'delete', id: noteID});
+                $.ajax({
+            	    type: "DELETE",
+            	    url: "/note/"+noteID
+        	});
+    	    });
+	    client.publish('/notes', {client: uniqid, status: 'new', id: res.id, title: res.title, message: messageD});
 	    $( ".note" ).draggable({
             stop: function(event, ui) {
-                $.ajax({
-                    type: "POST",
-                    url: "/note/" + ui.helper[0].dataset.noteid,
-                    data: { xpos: ui.position.left, ypos: ui.position.top }
-                });
+		afterDragging(event, ui);
             }
         });
 	});
     });
 });
+
+
+$(window).load(function() {
+    // executes when complete page is fully loaded, including all frames, objects and images
+    client = new Faye.Client('/messages');
+    var subscription = client.subscribe('/updates', function(message) {
+	if(message.client == uniqid) return;
+	console.log('Animating ' + message.id + " at X: " + message.xpos + " and Y: " + message.ypos);
+	$('#'+message.id).animate({
+	    left: message.xpos,
+            top: message.ypos
+        }, 1000);
+    });
+    // end callback
+    var subscription2 = client.subscribe('/notes', function(message) {
+        if(message.client == uniqid) return;
+	if(message.status == 'new') {
+	$("#notes-ul").append("<li class='note' id='" + message.id + "' data-noteid=" + message.id + " data-xpos=0 data-ypos=0><a><h2>" + message.title + "</h2><p>" + message.message + "</p><i class='fa fa-trash-o fa-2x trash-icon'></i></a></li>");
+	$('.trash-icon').click(function(e) {
+            var noteID = $(this).parent('a').parent('li')[0]['dataset'].noteid;
+            $(this).parent('a').parent('li').remove();
+            client.publish('/notes', {client: uniqid, status: 'delete', id: noteID});
+            $.ajax({
+                type: "DELETE",
+                url: "/note/"+noteID
+            });
+        });
+	$( ".note" ).draggable({
+            stop: function (event, ui) {
+		afterDragging(event, ui);
+	    }
+        });
+	}
+	else {
+	     // delete note
+	    $('#'+message.id).remove();
+	}
+    });
+});
+
+function afterDragging(event, ui) {
+    client.publish('/updates', {client: uniqid, id: ui.helper[0].dataset.noteid, xpos: ui.position.left, ypos: ui.position.top});
+    $.ajax({
+        type: "POST",
+        url: "/note/" + ui.helper[0].dataset.noteid,
+        data: { xpos: ui.position.left, ypos: ui.position.top }
+    });
+};

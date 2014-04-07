@@ -10,10 +10,6 @@ module.exports = function(app) {
     app.get('/', function(req, res) {
         console.log("[%s %s] GET /", req.ip, new Date().toISOString());       
 	app.get("model").getNotes(function(success, result) {
-	     //res.render('index', {notes: [
-            //{id: 'note1', title: 'Title #1', message: 'Text Content #1', x: 300, y: 300},
-            //{id: 'note2', title: 'Title #2', message: 'Text Content #2', x: 1200, y: 700}
-            //]});
 	    res.render('index', {notes: result});
         });
 

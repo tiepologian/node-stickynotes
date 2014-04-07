@@ -22,8 +22,8 @@ app.configure(function() {
 
 
 var routes = require('./routes/index')(app);
-//var bayeux = new faye.NodeAdapter({mount: '/chat', timeout: 45});
-//bayeux.attach(server);
+var bayeux = new faye.NodeAdapter({mount: '/messages', timeout: 45});
+bayeux.attach(server);
 server.listen(8000);
 console.log("[127.0.0.1 %s] Server up and listening on port 8000", new Date().toISOString());
 
