@@ -32,6 +32,20 @@ $(document).ready(function () {
         });
     });
     //
+    $("#notes-ul").on("click", "i", function (e) {
+        var noteID = $(this).parent('a').parent('li')[0]['dataset'].noteid;
+        $(this).parent('a').parent('li').remove();
+        client.publish('/notes', {
+            client: uniqid,
+            status: 'delete',
+            id: noteID
+        });
+        $.ajax({
+            type: "DELETE",
+            url: "/note/" + noteID
+        });
+    });
+    //
     $('#addicon').magnificPopup({
         type: 'inline',
         preloader: false,
@@ -45,20 +59,6 @@ $(document).ready(function () {
                 }
             }
         }
-    });
-    //
-    $('.trash-icon').click(function (e) {
-        var noteID = $(this).parent('a').parent('li')[0]['dataset'].noteid;
-        $(this).parent('a').parent('li').remove();
-        client.publish('/notes', {
-            client: uniqid,
-            status: 'delete',
-            id: noteID
-        });
-        $.ajax({
-            type: "DELETE",
-            url: "/note/" + noteID
-        });
     });
     //
     $("#test-form").submit(function (event) {
@@ -75,19 +75,6 @@ $(document).ready(function () {
             .done(function (res) {
                 $('#note_t').val("");
                 $("#notes-ul").append("<li class='note' id='" + res.id + "' data-noteid=" + res.id + " data-xpos=0 data-ypos=0><a><h2>" + res.title + "</h2><p>" + messageD + "</p><i class='fa fa-trash-o fa-2x trash-icon'></i></a></li>");
-                $('.trash-icon').click(function (e) {
-                    var noteID = $(this).parent('a').parent('li')[0]['dataset'].noteid;
-                    $(this).parent('a').parent('li').remove();
-                    client.publish('/notes', {
-                        client: uniqid,
-                        status: 'delete',
-                        id: noteID
-                    });
-                    $.ajax({
-                        type: "DELETE",
-                        url: "/note/" + noteID
-                    });
-                });
                 client.publish('/notes', {
                     client: uniqid,
                     status: 'new',
@@ -99,7 +86,6 @@ $(document).ready(function () {
             });
     });
 });
-
 
 $(window).load(function () {
     // executes when complete page is fully loaded, including all frames, objects and images
@@ -116,19 +102,6 @@ $(window).load(function () {
         if (message.client == uniqid) return;
         if (message.status == 'new') {
             $("#notes-ul").append("<li class='note' id='" + message.id + "' data-noteid=" + message.id + " data-xpos=0 data-ypos=0><a><h2>" + message.title + "</h2><p>" + message.message + "</p><i class='fa fa-trash-o fa-2x trash-icon'></i></a></li>");
-            $('.trash-icon').click(function (e) {
-                var noteID = $(this).parent('a').parent('li')[0]['dataset'].noteid;
-                $(this).parent('a').parent('li').remove();
-                client.publish('/notes', {
-                    client: uniqid,
-                    status: 'delete',
-                    id: noteID
-                });
-                $.ajax({
-                    type: "DELETE",
-                    url: "/note/" + noteID
-                });
-            });
             $(".note").draggable();
         } else {
             // delete note
