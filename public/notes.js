@@ -73,7 +73,6 @@ $(document).ready(function () {
             },
         })
             .done(function (res) {
-                console.log(res.id);
                 $('#note_t').val("");
                 $("#notes-ul").append("<li class='note' id='" + res.id + "' data-noteid=" + res.id + " data-xpos=0 data-ypos=0><a><h2>" + res.title + "</h2><p>" + messageD + "</p><i class='fa fa-trash-o fa-2x trash-icon'></i></a></li>");
                 $('.trash-icon').click(function (e) {
@@ -107,7 +106,6 @@ $(window).load(function () {
     client = new Faye.Client('/messages');
     var subscription = client.subscribe('/updates', function (message) {
         if (message.client == uniqid) return;
-        console.log('Animating ' + message.id + " at X: " + message.xpos + " and Y: " + message.ypos);
         $('#' + message.id).animate({
             left: message.xpos,
             top: message.ypos
