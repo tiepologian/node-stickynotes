@@ -50,7 +50,7 @@ module.exports = function (app) {
 	res.redirect('/admin/index.html');
     });
 
-    app.get('/admin/index.html', function(req, res) {
+    app.get('/admin/index.html', app.get("auth"), function(req, res) {
 	statsController.getAdminStats(req, res, app.get("model"), function(stats) {
 	    res.render('admin', {data: stats});
 	});

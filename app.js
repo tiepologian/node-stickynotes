@@ -17,6 +17,8 @@ app.configure(function () {
     app.set('view engine', 'ejs');
     app.set("model", model);
     model.setup();
+    var auth = express.basicAuth('test', 'test');
+    app.set("auth", auth);
 });
 
 
