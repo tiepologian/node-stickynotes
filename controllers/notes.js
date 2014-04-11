@@ -9,6 +9,18 @@ controller.getNotes = function (req, res, model) {
     });
 }
 
+controller.getOrderedNotes = function (req, res, model, done) {
+    model.getNotes(function (success, result) {
+        if (success) done(true, result.sort(function(a,b){ 
+    		var x = a.id < b.id? -1:1; 
+    		return x; 
+		})
+	);
+        else done(false, "");
+    });
+}
+
+
 controller.getNote = function (req, res, model) {
     model.getNoteByID(req.params.id, function (success, result) {
         if (success) res.json(result);
@@ -47,6 +59,20 @@ controller.updateNote = function (req, res, model) {
     note.xpos = req.body.xpos;
     note.ypos = req.body.ypos;
     model.updateNote(note, function (success, result) {
+        if (success) res.json({
+            status: 'OK'
+        });
+        else res.end({
+            status: 'Error'
+        });
+    });
+}
+
+controller.updateNoteMessage = function (req, res, model) {
+    var note = new Object();
+    note.id = req.params.id;
+    note.message = req.body.message;
+    model.updateNoteMessage(note, function (success, result) {
         if (success) res.json({
             status: 'OK'
         });

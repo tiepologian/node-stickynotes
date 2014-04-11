@@ -1,7 +1,7 @@
 {
   "name": "node-stickynotes",
-  "version": "1.0.0",
-  "description": "Notes in the Cloud using Node.js, Express.js, Web Sockets (Faye) and Redis",
+  "version": "2.0.0",
+  "description": "Notes in the Cloud using Node.js, Express.js, Web Sockets (Faye), Redis and a Bootstrap Admin Interface",
   "main": "app.js",
   "repository": {
     "type": "git",
@@ -17,6 +17,8 @@
    "express": "*",
    "ejs": "*",
    "redis": "*",
-   "faye": "*"
+   "faye": "*",
+   "ua-parser": "*",
+   "usage": "*"
    }
 }

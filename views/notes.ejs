@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="">
+	<meta name="author" content="">
+	<link rel="shortcut icon" href="images/icon.png">
+
+	<title>Stickynotes | Notes</title>
+	<link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,400italic,700,800" rel="stylesheet" type="text/css">
+	<link href="http://fonts.googleapis.com/css?family=Raleway:300,200,100" rel="stylesheet" type="text/css">
+
+	<!-- Bootstrap core CSS -->
+	<link href="js/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="js/jquery.gritter/css/jquery.gritter.css">
+	<link rel="stylesheet" href="fonts/font-awesome-4/css/font-awesome.min.css">
+
+	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	<!--[if lt IE 9]>
+	  <script src="../../assets/js/html5shiv.js"></script>
+	  <script src="../../assets/js/respond.min.js"></script>
+	<![endif]-->
+	<link rel="stylesheet" type="text/css" href="js/jquery.nanoscroller/nanoscroller.css">
+
+	<link rel="stylesheet" type="text/css" href="js/jquery.niftymodals/css/component.css">  
+	<link href="js/jquery.icheck/skins/flat/green.css" rel="stylesheet">  
+	<link href="css/style.css" rel="stylesheet">	
+    
+	</head>
+	<body class="cbp-spmenu-push">
+
+	<div class="" style="opacity: 1; margin-left: 0px;" id="cl-wrapper">
+
+  <div class="cl-sidebar">
+    <div class="cl-toggle"><i class="fa fa-bars"></i></div>
+    <div class="cl-navblock">
+      <div class="menu-space">
+        <div class="content">
+          <div class="sidebar-logo">
+            <div class="logo">
+                <a href="#"></a>
+            </div>
+          </div>
+          <div class="side-user">
+            <div class="avatar"><img src="images/avatar.png" alt="Avatar" /></div>
+            <div class="info">
+              <p>Stickynotes <b>Guest</b></p>
+              <div class="progress progress-user">
+                <div class="progress-bar" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
+                  <span class="sr-only">50% Complete (success)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <ul class="cl-vnavigation">
+            <li><a href="/admin/index.html"><i class="fa fa-home"></i><span>Dashboard</span></a></li>
+            <li class="active"><a href="#"><i class="fa fa-list-alt"></i><span>Notes</span></a></li>
+            <li><a href="/admin/logs.html"><i class="fa fa-file"></i><span>Logs</span></a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="text-right collapse-button" style="padding:7px 9px;">
+        <input class="form-control search" placeholder="Search..." type="text">
+        <button id="sidebar-collapse" class="btn btn-default" style=""><i style="color:#fff;" class="fa fa-angle-left"></i></button>
+      </div>
+    </div>
+  </div>
+	<div class="container-fluid" id="pcont">
+   <!-- TOP NAVBAR -->
+  <div id="head-nav" class="navbar navbar-default">
+    <div class="container-fluid">
+      <div class="navbar-collapse">
+        <ul class="nav navbar-nav navbar-right user-nav">
+          <li class="dropdown profile_menu">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><img width="30px" height="30px" alt="Avatar" src="images/avatar.png" /><span>Guest</span></a>
+          </li>
+        </ul>	
+      </div><!--/.nav-collapse animate-collapse -->
+    </div>
+  </div>
+  
+    
+	<div class="cl-mcont">				
+		<div class="row">		
+        	<div class="col-md-9">			
+				<div class="block-flat">
+					<div class="header">							
+						<h3>Notes</h3>
+					</div>
+					<div class="content">
+                    			<div class="table-responsive">
+            				<table class="no-border hover list">
+              				<tbody class="no-border-y">
+
+					<% for(var i=0; i<notes.length; i++) {%>
+   					<tr class="items">
+					    <td style="width: 10%;"><span class="label label-warning"><%= notes[i].id %></span></td>
+					    <td><p><strong><%= notes[i].title %></strong><span><%= notes[i].message %></span></p></td>
+					    <td class="color-success"></td>
+					    <td class="text-right" style="width: 15%;"><a class="label label-default md-trigger edit-note" data-modal="form-edit" href="#"><i data-placement="left" data-toggle="tooltip" data-original-title="Edit" class="fa fa-pencil"></i></a> <a data-placement="right" data-toggle="tooltip" data-original-title="Delete" class="delete-note label label-danger md-trigger" data-modal="nft-default" href="#"><i class="fa fa-times"></i></a></td>
+					</tr>
+					<% } %>
+              				</tbody>
+            				</table>
+            				</div>
+					<div style="height:50px;"></div>
+					<button id="create-note-btn" class="btn btn-danger btn-flat md-trigger" data-modal="form-primary">Create Note</button>
+							
+                
+                			<!-- Nifty Modal -->
+                			<div class="md-modal md-effect-1" id="nft-default">
+                    			<div class="md-content">
+                      				<div class="modal-header">
+                        				<button type="button" class="close md-close" data-dismiss="modal" aria-hidden="true">×</button>
+                      				</div>
+                      				<div class="modal-body">
+                        			<div class="text-center">
+                          			<div class="i-circle primary"><i class="fa fa-check"></i></div>
+                          				<h4 id="delete-form-title">Delete Note?</h4>
+                          				<p>Once you delete it, it's gone forever!</p>
+                        			</div>
+                      				</div>
+                      				<div class="modal-footer">
+                        				<button type="button" class="btn btn-default btn-flat md-close" data-dismiss="modal">Cancel</button>
+                        				<button type="button" id="delete-note-btn" class="btn btn-primary btn-flat md-close" data-dismiss="modal">Delete</button>
+                      				</div>
+                    			</div>
+                			</div>
+                            
+                             <!-- Nifty Modal -->
+                			<div class="md-modal colored-header custom-width md-effect-9" id="form-primary">
+                    			<div class="md-content">
+                      				<div class="modal-header">
+                        				<h3>New Note</h3>
+                        				<button type="button" class="close md-close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                      				</div>
+                      				<div class="modal-body form">                        				
+                        				<div class="form-group">
+                          					<label>Message</label>
+                                        	<textarea id="form-new-message" class="form-control" placeholder="Write a message..."></textarea>
+                        				</div>
+                      				</div>
+                      				<div class="modal-footer">
+                        				<button type="button" class="btn btn-default btn-flat md-close" data-dismiss="modal">Cancel</button>
+                        				<button id="form-create-btn" type="button" class="btn btn-primary btn-flat md-close" data-dismiss="modal">Save</button>
+                      				</div>
+                    			</div>
+                			</div>
+                            
+                            <!-- Nifty Modal -->
+                			<div class="md-modal colored-header custom-width md-effect-9" id="form-edit">
+                    			<div class="md-content">
+                      				<div class="modal-header">
+                        				<h3 id="edit-form-title">Editing Note 1</h3>
+                        				<button type="button" class="close md-close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                      				</div>
+                      				<div class="modal-body form">                        				
+                        				<div class="form-group">
+                          					<label>Message</label>
+                                        	<textarea id="edit-form-message" class="form-control" placeholder="Write a message..."></textarea>
+                        				</div>
+                      				</div>
+                      				<div class="modal-footer">
+                        				<button type="button" class="btn btn-default btn-flat md-close" data-dismiss="modal">Cancel</button>
+                        				<button id="form-edit-btn" type="button" class="btn btn-primary btn-flat md-close" data-dismiss="modal">Update</button>
+                      				</div>
+                    			</div>
+                			</div>
+                            
+                			<div class="md-overlay"></div>
+						</div>
+					</div>	
+        </div>
+
+        </div>
+	</div>
+	
+	</div> 
+	
+</div>
+  
+	<script src="js/jquery.js"></script>
+	<script src="js/jquery.cookie/jquery.cookie.js"></script>
+  	<script src="js/jquery.pushmenu/js/jPushMenu.js"></script>
+	<script type="text/javascript" src="js/jquery.nanoscroller/jquery.nanoscroller.js"></script>
+	<script type="text/javascript" src="js/jquery.sparkline/jquery.sparkline.min.js"></script>
+  	<script type="text/javascript" src="js/jquery.ui/jquery-ui.js"></script>
+	<script type="text/javascript" src="js/jquery.gritter/js/jquery.gritter.js"></script>
+	<script type="text/javascript" src="js/behaviour/core.js"></script>
+ 	<script type="text/javascript" src="js/jquery.icheck/icheck.js"></script>
+	<script src="js/jquery.niftymodals/js/jquery.modalEffects.js"></script>
+    
+	<script type="text/javascript"> 
+    $(document).ready(function(){
+      //initialize the javascript
+	$('.md-trigger').modalEffects();
+			 
+	$('.delete-note').click(function(e) {
+        	noteTitle = $(this).parent().siblings(":eq(1)").find('strong').text();
+		noteId = $(this).parent().siblings(":eq(0)").find('span').text();
+		$('#delete-form-title').text('Delete ' + noteTitle + '?');
+		$('#delete-form-title').attr('data-noteid', noteId);
+        });
+			
+	$('.edit-note').click(function(e) {
+        	noteTitle = $(this).parent().siblings(":eq(1)").find('strong').text();
+		noteText = $(this).parent().siblings(":eq(1)").find('span').text();
+		noteId = $(this).parent().siblings(":eq(0)").find('span').text();
+		$('#edit-form-title').text('Editing ' + noteTitle);
+		$('#edit-form-title').attr('data-noteid', noteId);
+		$('#edit-form-message').text(noteText);
+        });
+			
+	$('#delete-note-btn').click(function(e) {
+        	noteID = $('#delete-form-title').attr('data-noteid');
+		$.ajax({
+            	    type: "DELETE",
+                    url: "/note/" + noteID
+                }).done(function (res) {
+                location.reload();
+            });
+        });
+
+	$('#form-create-btn').click(function(e) {	
+	    var noteText = $('#form-new-message').val();
+	    $.ajax({type: "POST", url: "/notes/", data: { message: noteText }})
+	    .done(function (res) {
+	        location.reload();
+	    });
+	});
+
+	$('#form-edit-btn').click(function(e) {
+            var noteText = $('#edit-form-message').val();
+	    var noteID = $('#edit-form-title').attr('data-noteid');
+	    console.log("Updating "+noteID+" with text: "+noteText);
+            $.ajax({type: "PUT", url: "/note/" + noteID, data: { message: noteText }})
+            .done(function (res) {
+                location.reload();
+            });
+        });
+
+    });
+	</script>
+  
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+  <script src="js/behaviour/voice-commands.js"></script>
+  <script src="js/bootstrap/dist/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="js/jquery.flot/jquery.flot.js"></script>
+  <script type="text/javascript" src="js/jquery.flot/jquery.flot.pie.js"></script>
+  <script type="text/javascript" src="js/jquery.flot/jquery.flot.resize.js"></script>
+  <script type="text/javascript" src="js/jquery.flot/jquery.flot.labels.js"></script>
+
+<a style="display: none;" href="#" class="back-to-top"><i class="fa fa-angle-up"></i></a>
+</body>
+</html>
