@@ -45,7 +45,7 @@ ul li a{
   color:#000;
   background:#ffc;
   display:block;
-  height:10em;
+  min-height:10em;
   width:10em;
   padding:1em;
   -moz-box-shadow:5px 5px 7px rgba(33,33,33,1);
